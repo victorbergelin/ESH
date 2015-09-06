@@ -1,6 +1,15 @@
 # Main script for Punkten calculations
 
 import prodfeat, prodsend
+BUTTONPATH='/home/pi/esh/buttons'
+PREDLOW = 2
+PREDHIGH = 4
+
+
+def setbutton(prediction):
+	if (prediction < PREDLOW
+ 	
+	return
 
 def main():
 	while True:
@@ -34,8 +43,7 @@ def main():
 			print(lastpred)
 
 
-		# check for new recordings, if none continue
-			
+		
 		# check for buttons
 
 

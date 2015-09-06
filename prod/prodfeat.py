@@ -22,9 +22,9 @@ import numpy as np
 import time
 import datetime
 
-RECSPATH = './rec/'
-PYPATH = './prod/'
-FEATUREPATH = 'features.csv'
+RECSPATH = '/home/pi/esh/rec/'
+PYPATH = '/home/pi/esh/prod/'
+FEATUREPATH = '/home/pi/esh/features.csv'
 
 # Import log:
 
@@ -112,9 +112,10 @@ def main():
 			print("Found newfile: " + newfile)
 			
 			newfeatures = extractfeatures(newfile)
-			filedate = newfile[4:-4]
+			# 1441527709.wav
+			filedate = newfile[:-4]
 
-			timestamp = int(time.mktime(datetime.datetime.strptime(filedate, "%Y-%m-%d_%H-%M-%S").timetuple()))
+			timestamp = int(filedate) #= int(time.mktime(datetime.datetime.strptime(filedate, "%Y-%m-%d_%H-%M-%S").timetuple()))
 
 			extractfeature = [timestamp] + newfeatures
 			savefeature(extractfeature,FEATUREPATH)

@@ -1,31 +1,28 @@
+BUTTONPATH = '/home/pi/esh/buttons'
+LEDPATH = '/home/pi/esh/leds/confess'
+MLPATH = '/home/pi/esh/prod/ML'
+PYPATH = '/home/pi/esh/prod/'
+PREDLOW = 2
+PREDHIGH = 4
 
 
-	# 0. listen for new files
-	newfiles = listengetnewfiles()
+def main():
+	f1 = open(BUTTONPATH,'r')
+	fbut = f1.read()
+	f1.close()
+	fappend = open(PYPATH + 'butimportlog','a')
+	f2 = open(PYPATH + 'butimportlog','r')
+	fread = f2.read()
+	f2.close()
 
-	# 1. load model:
-	clf = joblib.load(MLPATH) 
+	newclicks = []
 
-	# 2. load files and create features:
-	# 3. make prediction:
-	if(len(newfiles)!=0):
-		YpredSave = []
-		print(len(newfiles) + "file(s) found: " + str(newfiles))
-		for files in newfiles:
-			features = prodfeat.extractfeatures(str(files))
-			Xtest = [x[1:] for x in features]	
-			Ypred = clf.predict(Xtest)
-			prodfeat.savefeature(Ysave,'Ysave.csv')
-			indexprediction = [x[0] for x in traindata[0]]
-		updatecolors(pred2col(Ypred))
-	else: 
-		print("No files found")
+	for line in fbut:
+		print(line)
 
+	fappend.close()
 
-	# print(len(indexprediction))
+	return
 
-	for i in range(len(indexprediction)):
-		Ysave.append([indexprediction[i],Ypred[i]])
-		#print([indexprediction[i],Ypred[i],i])
-
-	print(len(Ysave))
+if __name__ == "__main__":
+	main()

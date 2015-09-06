@@ -2,35 +2,88 @@
 
 import prodfeat, prodsend
 
+from sklearn import svm
+from sklearn.externals import joblib
+
+BUTTONPATH = '/home/pi/esh/buttons'
+LEDPATH = '/home/pi/esh/leds/confess'
+MLPATH = '/home/pi/esh/prod/ML'
+PYPATH = '/home/pi/esh/prod/'
+PREDLOW = 2
+PREDHIGH = 4
+
+
+def setbutton(prediction):
+	col = ""
+	if(prediction < 2):
+		col = "r"
+	elif(prediction < 4 and prediction >= 2):
+		col = "y"
+	else:
+		col = "g"
+
+	f = open(LEDPATH,'w')
+	f.write(col)
+	f.close()
+	return 
+
+
+def getdatapredict():
+	allnewfeatures = prodfeat.main()
+	print ("allnewfeatures: " + str(allnewfeatures))
+	# make predictions
+	if (allnewfeatures!=[]):
+		Ysave = []
+		clf = joblib.load(MLPATH)
+		Xpred = [feature[1:] for feature in allnewfeatures]	
+		Ypred = clf.predict(Xpred)
+		
+
+		indexprediction = [feature[0] for feature in allnewfeatures]
+		for i in range(len(indexprediction)):
+			Ysave.append([indexprediction[i],Ypred[i]])
+
+		prodfeat.savefeature(Ysave,'PredSave.csv')
+
+		# print Ysave
+
+		# send predictions
+		prodsend.sendreq(Ysave)
+
+
+		# update colors
+		# ***
+		lastpred=Ysave[:]
+		print(lastpred)
+		# setbutton(lastpred)
+	return
+
+def getbuttontrain():
+	f1 = open(BUTTONPATH,'r')
+	fbut = f1.read()
+	f1.close()
+	fappend = open(PYPATH + 'butimportlog','a')
+	f2 = open(PYPATH + 'butimportlog','r')
+	fread = f2.read()
+	f2.close()
+
+	newclicks = []
+
+	for line in fbut:
+		print(line)
+
+	fappend.close()
+
+	return
+
 def main():
 	while True:
-		# get and save all new features:
-		allnewfeatures = prodfeat.main()
-		print ("allnewfeatures: " + str(allnewfeatures))
-		# make predictions
-		if (allnewfeatures!=[]):
-			Ysave = []
-			clf = joblib.load(MLPATH)
-			Xpred = [feature[1:] for feature in allnewfeatures]	
-			Ypred = clf.predict(Xpred)
-			
-	
-			indexprediction = [feature[0] for feature in allnewfeatures]
-			for i in range(len(indexprediction)):
-				Ysave.append([indexprediction[i],Ypred[i]])
-	
-			prodfeat.savefeature(Ysave,'PredSave.csv')
-	
-			# print Ysave
-	
-			# send predictions
-			prodsend.sendreq(Ysave)
-
-	# update colors
-
-		# check for new recordings, if none continue
-			
+		# 1. Get and save all new features if new files are available:
+		# -----------------------------------
+		getdatapredict()
+		
 		# check for buttons
+		getbuttontrain()
 
 
 

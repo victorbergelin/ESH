@@ -30,16 +30,6 @@ def listengetnewfiles():
 	f.close()
 	return newfiles
 
-def pred2col(prediction):
-	col = 0
-	if(prediction < 2):
-		col = 1
-	elif(prediction < 4 and prediction >= 2):
-		col = 2
-	else:
-		col = 3
-	return col
-
 def main():
 
 	# get and save all new features:
