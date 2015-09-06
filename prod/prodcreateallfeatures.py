@@ -22,15 +22,14 @@ import numpy as np
 import time
 import datetime
 
-RECSPATH = './rec/'
-PYPATH = './prod/'
+RECSPATH = './recs_ESH/'
 FEATUREPATH = 'features.csv'
 
 # Import log:
 
 def getnewfiles():
-	f = open(PYPATH + 'importlog','a')
-	f2 = open(PYPATH + 'importlog','r')
+	f = open('importlog','a')
+	f2 = open('importlog','r')
 	fr=f2.read()
 	f2.close()
 

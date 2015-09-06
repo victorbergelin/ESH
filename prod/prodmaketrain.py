@@ -56,7 +56,7 @@ def maketrainingdata(featurelist,clicklist):
 	return [resultsX,resultsY]
 
 def main():
-	
+
 	clicklist = getclicks()
 	featurelist = getfeatures()
 	trainingdata = maketrainingdata(featurelist,clicklist)
