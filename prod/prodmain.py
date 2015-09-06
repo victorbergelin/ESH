@@ -1,13 +1,13 @@
 # Main script for Punkten calculations
 
-import prodfeat, prodsend
+import prodfeat, prodsend, prodmaketrain
 
 from sklearn import svm
 from sklearn.externals import joblib
 
-BUTTONPATH = '/home/pi/esh/buttons'
+BUTTONPATH = '/home/pi/esh/buttons/button.csv'
 LEDPATH = '/home/pi/esh/leds/confess'
-MLPATH = '/home/pi/esh/prod/ML'
+MLPATH = '/home/pi/esh/prod/ML/SVN.pkl'
 PYPATH = '/home/pi/esh/prod/'
 PREDLOW = 2
 PREDHIGH = 4
@@ -59,9 +59,9 @@ def getdatapredict():
 	return
 
 def getbuttontrain():
-	f1 = open(BUTTONPATH,'r')
-	fbut = f1.read()
-	f1.close()
+	fbut = open(BUTTONPATH,'r')
+	# fbut = f1.read()
+	# f1.close()
 	fappend = open(PYPATH + 'butimportlog','a')
 	f2 = open(PYPATH + 'butimportlog','r')
 	fread = f2.read()
@@ -70,21 +70,35 @@ def getbuttontrain():
 	newclicks = []
 
 	for line in fbut:
-		print(line)
+		# print fread.find(line[:10])
+		if(fread.find(line[:10]) == -1):
+			newclicks.append(line)
+			fappend.write(line + "\n")
 
 	fappend.close()
+	if (newclicks == []):
+		# print("no new clicks")
+		return -1
 
-	return
+	for click in newclicks:
+		clicktime=click[:10]
+		clickcol=click[11:]		
+		# print(clicktime)
+		# print(clickcol)
+		
+			
+	return		
+
+	
 
 def main():
 	while True:
 		# 1. Get and save all new features if new files are available:
 		# -----------------------------------
-		getdatapredict()
+		# getdatapredict()
 		
 		# check for buttons
 		getbuttontrain()
-
 
 
 	return
