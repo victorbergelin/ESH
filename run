@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+python buttons/buttonHandler.py &
+echo $!
+python leds/ledWatcherz.py &
+echo $!
+./rec/recScript
